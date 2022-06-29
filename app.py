@@ -10,7 +10,7 @@ from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from threading import Event
 # import signal
-import pypyodbc as pyodbc
+import pyodbc
 import pysftp
 import pandas as pd
 
