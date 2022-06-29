@@ -1,0 +1,52 @@
+<!-- renders the account of the client and their current policy -->
+
+{% extends "layout.html" %}
+
+{% block title %}
+    Index
+{% endblock %}
+
+{% block main %}
+<main class="container py-5 text-center">
+    <table class="table tablestriped">
+        <thead>
+            <tr>
+                <th class="text-start">Name</th>
+                <th class="text-start">Start Date</th>
+                <th class="text-start">Date of Birth</th>
+                <th class="text-start">Email</th>
+                <th class="text-start">Gender</th>
+                <th class="text-start">Premium</th>
+                <th class="text-start">Policy Type</th>
+            </tr>
+            <tbody>
+                {% for infor in myinfo %}
+                    <tr>
+                        <td>
+                            {{ infor.name }}
+                        </td>
+                         <td>
+                            {{ infor.startdate }}
+                        </td>
+                        <td>
+                            {{ infor.dob}}
+                        </td>
+                        <td>
+                            {{ infor.email }}
+                        </td>
+                        <td>
+                            {{ infor.gender}}
+                        </td>
+                        <td>
+                            {{ infor.premium}}
+                        </td>
+                        <td>
+                            {{ infor.policytype}}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </thead>
+    </table>
+</main>
+{% endblock %}
