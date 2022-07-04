@@ -4,7 +4,6 @@ import sys
 from helpers import login_required, apology
 import logging
 from flask import Flask, flash, jsonify, redirect, render_template, request, session, url_for
-from flask_kafka import FlaskKafka
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
@@ -18,7 +17,7 @@ server = 'hk-mc-fc-data.database.windows.net'
 database = 'hk-mc-fc-data-training'
 username = 'server-admin'
 password = 'Pa$$w0rd'
-cxnx = pyodbc.connect('DRIVER={SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
+cxnx = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
 cursor = cxnx.cursor()
 
 # Configure application
