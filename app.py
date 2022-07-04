@@ -39,7 +39,7 @@ logging.basicConfig(level=logging.DEBUG)
 if __name__ == "__main__":
     # Setting debug to True enables debug output. This line should be
     # removed before deploying a production app.
-    app.debug = False
+    app.debug = True
     app.run()
 
 @app.after_request
@@ -107,7 +107,7 @@ def login():
 
         # Ensure username was submitted
         if not email:
-            return apology("must provide email", 403)
+            return apology("must provide email")
 
         # Query database for username
         rows = cursor.execute("SELECT * FROM users WHERE username = email", request.form.get("email"), use_http2=True)
