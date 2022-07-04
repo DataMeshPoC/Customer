@@ -8,16 +8,22 @@
 
 {% block main %}
 <main class="container py-5 text-center">
+<div>
+<h1>
+Hello, { myinfo.name> }!
+</h1>
+</div>
+<div>
     <table class="table tablestriped">
         <thead>
             <tr>
                 <th class="text-start">Name</th>
-                <th class="text-start">Start Date</th>
+                <th class="text-start">Gender</th>
                 <th class="text-start">Date of Birth</th>
                 <th class="text-start">Email</th>
-                <th class="text-start">Gender</th>
-                <th class="text-start">Premium</th>
-                <th class="text-start">Policy Type</th>
+                <th class="text-start">Country of Origin</th>
+                <th class="text-start">Smoking Status</th>
+                <th class="text-start">Customer Status</th>
             </tr>
             <tbody>
                 {% for infor in myinfo %}
@@ -26,7 +32,7 @@
                             {{ infor.name }}
                         </td>
                          <td>
-                            {{ infor.startdate }}
+                            {{ infor.gender }}
                         </td>
                         <td>
                             {{ infor.dob}}
@@ -35,18 +41,19 @@
                             {{ infor.email }}
                         </td>
                         <td>
-                            {{ infor.gender}}
+                            {{ infor.country}}
                         </td>
                         <td>
-                            {{ infor.premium}}
+                            {{ infor.smoking_status}}
                         </td>
                         <td>
-                            {{ infor.policytype}}
+                            {{ infor.customer_status}}
                         </td>
                     </tr>
                 {% endfor %}
             </tbody>
         </thead>
     </table>
+    </div>
 </main>
 {% endblock %}
