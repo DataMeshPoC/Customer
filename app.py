@@ -181,7 +181,7 @@ def register():
          # Check if login information is already taken
         try:
             sql3 = f"INSERT INTO dbo.customers (email, name) VALUES(?, ?), email = '{request.form.get('email')}', name = '{request.form.get('name')}'"
-            id = cursor.execute(sql3)
+            id = cursor.execute(sql3).commit()
         except ValueError:
             return apology("username taken")
 
