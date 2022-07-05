@@ -13,13 +13,6 @@ import pypyodbc as pyodbc
 import pysftp
 import pandas as pd
 
-server = 'hk-mc-fc-data.database.windows.net'
-database = 'hk-mc-fc-data-training'
-username = 'server-admin'
-password = 'Pa$$w0rd'
-cxnx = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
-cursor = cxnx.cursor()
-
 # Configure application
 app = Flask(__name__, template_folder='templates')
 
@@ -55,8 +48,19 @@ def after_request(response):
 def index():
     # Show the policies ordered by latest bought
     if request.method.get == "POST":
-        sql = "SELECT * FROM dbo.customers"
-        myinfo = pd.read_sql(sql)
+        
+        server = 'hk-mc-fc-data.database.windows.net'
+        database = 'hk-mc-fc-data-training'
+        username = 'server-admin'
+        password = 'Pa$$w0rd'
+        cxnx = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
+        cursor = cxnx.cursor()
+
+        sql = f"SELECT * FROM dbo.customers"
+        myinfo = cursor.execute(sql).fetchall()
+
+        cursor.close()
+        cxnx.close()
 
     return render_template("index.html", myinfo=myinfo)
 
@@ -65,6 +69,12 @@ def index():
 def buy():
     """Buy policies"""
     if request.method == "POST":
+        server = 'hk-mc-fc-data.database.windows.net'
+        database = 'hk-mc-fc-data-training'
+        username = 'server_admin'
+        password = 'Pa$$w0rd'
+        cxnx = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
+        cursor = cxnx.cursor()
 
         # Input desired plan
         name = request.form.get("Name")
@@ -75,20 +85,27 @@ def buy():
         if not name or not type or not category:
             return apology("Missing field")
 
-      #  Query the product database for the policies that can be bought
-        policyP = cursor.execute("SELECT * FROM fwd_poc.products WHERE type = :type", type=type)
+        # Query the product database for the policies that can be bought
+        query = f"SELECT Name, Category FROM fwd_poc.products WHERE type = '{request.form.get('type')}'"
+        policyP = cursor.execute(query).fetchall()
+
        # Error check for search result
         if not policyP:
             apology("Policy does not exist")
 
         typ = policyP[0]["Type"]
 
-       # Update stream with the new buyer information
-        results = cursor.api_client.inserts_stream("my_stream_name", typ=typ, use_http2=True)
-
-        # FIX ABOVE
+        # Update customer information
+        # ASK ABOUT THE CUSTOMER STATUS
+        sql = f"INSERT INTO dbo.customers (Email, Name, Customer_ID) VALUES (?, ?, ?), email, name, session['user_id']"
+        results = cursor.execute(sql)
+    
+        cxnx.commit()
 
         flash("Bought!")
+
+        cursor.close()
+        cxnx.close()
         return redirect("/")
 
     else:
@@ -101,6 +118,13 @@ def login():
     # Forget any user_id
     session.clear()
 
+    server = 'hk-mc-fc-data.database.windows.net'
+    database = 'hk-mc-fc-data-training'
+    username = 'server_admin'
+    password = 'Pa$$w0rd'
+    cxnx = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
+    cursor = cxnx.cursor()
+
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
         email = request.form.get("email")
@@ -110,11 +134,14 @@ def login():
             return apology("must provide email")
 
         # Query database for username
-        rows = cursor.execute("SELECT * FROM users WHERE username = email", request.form.get("email"), use_http2=True)
+        sql_query = f"SELECT * FROM dbo.customers WHERE email = '{request.form.get('email')}'"
+        rows = cursor.execute(sql_query).fetchall()
 
         # Remember which user has logged in
-        session["user_id"] = rows[0]["id"]
+        session["user_id"] = rows[0][0]
 
+        cursor.close()
+        cxnx.close ()
         # Redirect user to home page
         return redirect("/")
 
@@ -140,14 +167,21 @@ def register():
         email = str(request.form.get("email"))
         name = str(request.form.get("name"))
 
+        server = 'hk-mc-fc-data.database.windows.net'
+        database = 'hk-mc-fc-data-training'
+        username = 'server_admin'
+        password = 'Pa$$w0rd'
+        cxnx = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
+        cursor = cxnx.cursor()
+
         # Validate submission; ensure username was submitted
         if not email:
             return apology("Input email please.")
 
          # Check if login information is already taken
         try:
-            id = cursor.execute("INSERT INTO dbo.customers (email, name) VALUES(?, ?)",
-                            request.form.get("email"), request.form.get("email"))
+            sql3 = f"INSERT INTO dbo.customers (email, name) VALUES(?, ?), email = '{request.form.get('email')}', name = '{request.form.get('name')}'"
+            id = cursor.execute(sql3)
         except ValueError:
             return apology("username taken")
 
@@ -158,7 +192,12 @@ def register():
         flash("Registered!")
 
         # Insert the new login information from register into the users table
-        rows = cursor.api_client.inserts_stream("my_stream_name", email, name, session["user_id"])
+        sql = f"INSERT INTO dbo.customers (Email, Name) VALUES (?, ?, ?), email, name, session['user_id']"
+        rows = cursor.execute(sql)
+    
+        # Push to the database
+        cxnx.commit()
+       
         session["user_id"] = rows
 
     # Confirm registration
@@ -172,5 +211,3 @@ def errorhandler(e):
     if not isinstance(e, HTTPException):
         e = InternalServerError()
     return apology(e.name, e.code)
-
-cursor.close()
