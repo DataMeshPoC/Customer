@@ -8,11 +8,11 @@
 
 {% block main %}
 <main class="container py-5 text-center">
-<div>
-<h1>
-Hello, { myinfo.name }!
-</h1>
-</div>
+    <div>
+        <h1>
+            Hello, { myinfo.name }!
+        </h1>
+    </div>
 <div>
     <table class="table tablestriped">
         <thead>
@@ -35,7 +35,7 @@ Hello, { myinfo.name }!
                             {{ infor.gender }}
                         </td>
                         <td>
-                            {{ infor.dob}}
+                            {{ infor.dob }}
                         </td>
                         <td>
                             {{ infor.email }}
@@ -44,10 +44,10 @@ Hello, { myinfo.name }!
                             {{ infor.country}}
                         </td>
                         <td>
-                            {{ infor.smoking_status}}
+                            {{ infor.smoking_status }}
                         </td>
                         <td>
-                            {{ infor.customer_status}}
+                            {{ infor.customer_status }}
                         </td>
                     </tr>
                 {% endfor %}
