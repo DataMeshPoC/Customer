@@ -45,18 +45,17 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 @login_required
 def index():
-    # Show the policies ordered by latest bought
-    if request.method == "GET":
-        
-        server = 'hk-mc-fc-data.database.windows.net'
-        database = 'hk-mc-fc-data-training'
-        username = 'server_admin'
-        password = 'Pa$$w0rd'
-        cxnx = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
-        cursor = cxnx.cursor()
+    server = 'hk-mc-fc-data.database.windows.net'
+    database = 'hk-mc-fc-data-training'
+    username = 'server_admin'
+    password = 'Pa$$w0rd'
+    cxnx = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
+    cursor = cxnx.cursor()
+    # Make sure that the users reached routes via POST
+    if request.method == "POST":
 
         sql = f"SELECT * FROM dbo.customers WHERE email = '{request.form.get('email')}'"
         myinfo = cursor.execute(sql).fetchone()
@@ -74,47 +73,6 @@ def index():
     cursor.close()
     cxnx.close()
 
-@app.route("/buy", methods=["GET", "POST"])
-@login_required
-def buy():
-    """Buy policies"""
-    if request.method == "POST":
-        server = 'hk-mc-fc-data.database.windows.net'
-        database = 'hk-mc-fc-data-training'
-        username = 'server_admin'
-        password = 'Pa$$w0rd'
-        cxnx = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
-        cursor = cxnx.cursor()
-
-        # Input desired plan
-        session['email'] = request.form.get("email")
-        name = request.form.get("name")
-        category = request.form.get("Category")
-
-        # If no symbols are inputted
-        if not name or not type or not category:
-            return apology("Missing field")
-
-        # Query the product database for the policies that can be bought
-        query = f"SELECT Name, Category FROM fwd_poc.products WHERE type = '{request.form.get('type')}'"
-        policyP = cursor.execute(query).fetchall()
-
-       # Error check for search result
-        if not policyP:
-            apology("Policy does not exist")
-
-        typ = policyP[0]["Type"]
-
-        # Update Customers and Policy tables
-        # sql = f"SELECT dbo.customers (Customer_Status) VALUES (?, ?, ?), email, name, session['user_id']"
-       
-
-        cursor.close()
-        cxnx.close()
-        return redirect("/")
-
-    else:
-        return render_template("buy.html")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
