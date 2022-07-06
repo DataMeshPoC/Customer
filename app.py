@@ -48,13 +48,14 @@ def after_request(response):
 @app.route("/", methods=["GET", "POST"])
 @login_required
 def index():
+#     renders the users' data and allows them to purchase new policies
     server = 'hk-mc-fc-data.database.windows.net'
     database = 'hk-mc-fc-data-training'
     username = 'server_admin'
     password = 'Pa$$w0rd'
     cxnx = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
     cursor = cxnx.cursor()
-    # Make sure that the users reached routes via POST
+    # Make sure that the users reached routes via POST 
     if request.method == "POST":
 
         sql = f"SELECT * FROM dbo.customers WHERE email = '{request.form.get('email')}'"
@@ -62,6 +63,7 @@ def index():
 
         return render_template("index.html", myinfo=myinfo)
     
+#     Posting to the database for buying
     if request.method == "POST":
         sql= f"INSERT INTO dbo.policy (name, term, type, email, premiumpayment,premiumstructure, status) VALUES (?, ?, ?, ?, ?, ?, ?), name = '{request.form.get('name')}', email = '{request.form.get('email')}',term = '{request.form.get('email')}', premiumstructure = '{request.form.get('premiumstructure')}', type = '{request.form.get('email')}', status = 'Customer', premiumpayment = '{request.form.get('email')}'"
         results = cursor.execute(sql)
@@ -127,8 +129,12 @@ def register():
     # Make sure that the users reached routes via POST
     if request.method == "POST":
         session['email'] = str(request.form.get("email"))
-        name = str(request.form.get("name"))
-
+        gender = request.form.get("gender")
+        dob = request.form.get("dob")
+        country = request.form.get("country")
+        smoking_status = request.form.get("smoking_status")
+        gender = str(request.form.get("gender"))
+      
         server = 'hk-mc-fc-data.database.windows.net'
         database = 'hk-mc-fc-data-training'
         username = 'server_admin'
