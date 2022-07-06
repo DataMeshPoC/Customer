@@ -62,6 +62,15 @@ def index():
         myinfo = cursor.execute(sql).fetchone()
 
         return render_template("index.html", myinfo=myinfo)
+    
+    if request.method == "POST":
+        sql= f"INSERT INTO dbo.policy (name, term, type, email, premiumpayment,premiumstructure, status) VALUES (?, ?, ?, ?, ?, ?, ?), name = '{request.form.get('name')}', email = '{request.form.get('email')}',term = '{request.form.get('email')}', premiumstructure = '{request.form.get('premiumstructure')}', type = '{request.form.get('email')}', status = 'Customer', premiumpayment = '{request.form.get('email')}'"
+        results = cursor.execute(sql)
+        
+        cxnx.commit()
+
+        flash("Bought!")
+        return render_template("index.html")
     cursor.close()
     cxnx.close()
 
@@ -78,7 +87,7 @@ def buy():
         cursor = cxnx.cursor()
 
         # Input desired plan
-        email = request.form.get("email")
+        session['email'] = request.form.get("email")
         name = request.form.get("name")
         category = request.form.get("Category")
 
@@ -98,12 +107,7 @@ def buy():
 
         # Update Customers and Policy tables
         # sql = f"SELECT dbo.customers (Customer_Status) VALUES (?, ?, ?), email, name, session['user_id']"
-        sql= f"INSERT INTO dbo.policy (name, term, type, email, premiumpayment,premiumstructure, status) VALUES (?, ?, ?, ?, ?, ?, ?), name = '{request.form.get('name')}', email = '{request.form.get('email')}',term = '{request.form.get('email')}', premiumstructure = '{request.form.get('premiumstructure')}', type = '{request.form.get('email')}', status = 'Customer', premiumpayment = '{request.form.get('email')}'"
-        results = cursor.execute(sql)
-        
-        cxnx.commit()
-
-        flash("Bought!")
+       
 
         cursor.close()
         cxnx.close()
@@ -128,7 +132,9 @@ def login():
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
+        # Remember which user has logged in
         email = request.form.get("email")
+        session['email'] = request.form['email_address']
 
         # Ensure username was submitted
         if not email:
@@ -137,9 +143,6 @@ def login():
         # Query database for username
         sql_query = f"SELECT * FROM dbo.customers WHERE email = '{request.form.get('email')}'"
         rows = cursor.execute(sql_query).fetchall()
-
-        # Remember which user has logged in
-        session["user_id"] = rows[0][0]
 
         cursor.close()
         cxnx.close ()
@@ -165,7 +168,7 @@ def logout():
 def register():
     # Make sure that the users reached routes via POST
     if request.method == "POST":
-        email = str(request.form.get("email"))
+        session['email'] = str(request.form.get("email"))
         name = str(request.form.get("name"))
 
         server = 'hk-mc-fc-data.database.windows.net'
@@ -194,13 +197,13 @@ def register():
         flash("Registered!")
 
         # Insert the new login information from register into the users table
-        sql = f"INSERT INTO dbo.customers (Email, Name) VALUES (?, ?, ?), email, name, session['user_id']"
+        sql = f"INSERT INTO dbo.customers (Email, Name) VALUES (?, ?), session['email'], name]"
         rows = cursor.execute(sql)
     
         # Push to the database
         cxnx.commit()
        
-        session["user_id"] = rows
+        session["email"] = rows
 
     # Confirm registration
         return redirect("/")
