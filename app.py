@@ -1,5 +1,4 @@
 import email
-from lib2to3.pytree import _Results
 import os
 import sys
 from unicodedata import name
