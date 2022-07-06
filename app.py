@@ -98,7 +98,7 @@ def buy():
         typ = policyP[0]["Type"]
 
         # Update Customers and Policy tables
-        # sql = f"UPDATE dbo.customers (Customer_Status) VALUES (?, ?, ?), email, name, session['user_id']"
+        # sql = f"SELECT dbo.customers (Customer_Status) VALUES (?, ?, ?), email, name, session['user_id']"
         sql= f"INSERT INTO dbo.policy (name, term, type, email, premiumpayment,premiumstructure, status) VALUES (?, ?, ?, ?, ?, ?, ?), name = '{request.form.get('name')}', email = '{request.form.get('email')}',term = '{request.form.get('email')}', premiumstructure = '{request.form.get('premiumstructure')}', type = '{request.form.get('email')}', status = 'Customer', premiumpayment = '{request.form.get('email')}'"
         results = cursor.execute(sql)
         

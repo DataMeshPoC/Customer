@@ -10,50 +10,15 @@
 <main class="container py-5 text-center">
     <div>
         <h1>
-            Hello, { myinfo.name }!
+            Hello, {{ myinfo.name }}!
         </h1>
     </div>
-<div>
-    <table class="table tablestriped">
-        <thead>
-            <tr>
-                <th class="text-start">Name</th>
-                <th class="text-start">Gender</th>
-                <th class="text-start">Date of Birth</th>
-                <th class="text-start">Email</th>
-                <th class="text-start">Country of Origin</th>
-                <th class="text-start">Smoking Status</th>
-                <th class="text-start">Customer Status</th>
-            </tr>
-            <tbody>
-                {% for infor in myinfo %}
-                    <tr>
-                        <td>
-                            {{ infor.name }}
-                        </td>
-                         <td>
-                            {{ infor.gender }}
-                        </td>
-                        <td>
-                            {{ infor.dob }}
-                        </td>
-                        <td>
-                            {{ infor.email }}
-                        </td>
-                        <td>
-                            {{ infor.country}}
-                        </td>
-                        <td>
-                            {{ infor.smoking_status }}
-                        </td>
-                        <td>
-                            {{ infor.customer_status }}
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </thead>
-    </table>
+    <div>
+        <p>Gender: {{ myinfo.gender }}</p>
+        <p>Date of Birth: {{ myinfo.dob }}</p>
+        <p>Email: {{ myinfo.email }}</p>
+        <p>Country of Origin: {{ myinfo.country }}</p>
+        <p>Smoking Status: {{ myinfo.smoking_status }}</p>
     </div>
 </main>
 {% endblock %}
