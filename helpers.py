@@ -16,9 +16,8 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-def usd(value):
+def hkd(value):
     """Format value with dollar sign."""
-    # change this to the thai baht symbol
     return f"${value:,.2f}"
 
 def apology(message, code=400):
