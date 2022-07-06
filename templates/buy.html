@@ -5,14 +5,24 @@
 
 {% block main %}
     <form action="/buy" method="post">
+        oowx 7088
         <div class="mb-3">
-            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="Name" name="Name" placeholder="Name" type="text">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="name" name="name" placeholder="Name" type="text">
         </div>
         <div class="mb-3">
-            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="Type" name="Type" placeholder="Type of Policy" type="text">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="type" name="type" placeholder="Type of Policy" type="text">
         </div>
         <div class="mb-3">
-            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="Category" name="Category" placeholder="Category" type="text">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="term" name="term" placeholder="Term" type="text">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="email" name="email" placeholder="Email" type="text">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="premiumpayment" name="premiumpayment" placeholder="Premium Payment" type="text">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="premiumstructure" name="premiumstructure" placeholder="Structure of Premium" type="text">
         </div>
         <div class="mb-3">
             <button class="btn btn-primary" type="submit">Buy</button>
@@ -20,3 +30,4 @@
     </form>
 
 {% endblock %}
+

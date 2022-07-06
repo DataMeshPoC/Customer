@@ -1,5 +1,8 @@
+import email
+from lib2to3.pytree import _Results
 import os
 import sys
+from unicodedata import name
 
 from helpers import login_required, apology
 import logging
@@ -9,7 +12,7 @@ from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from threading import Event
 import signal
-import pypyodbc as pyodbc
+import pyodbc
 import pysftp
 import pandas as pd
 
@@ -47,22 +50,21 @@ def after_request(response):
 @login_required
 def index():
     # Show the policies ordered by latest bought
-    if request.method.get == "POST":
+    if request.method == "GET":
         
         server = 'hk-mc-fc-data.database.windows.net'
         database = 'hk-mc-fc-data-training'
-        username = 'server-admin'
+        username = 'server_admin'
         password = 'Pa$$w0rd'
         cxnx = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
         cursor = cxnx.cursor()
 
-        sql = f"SELECT * FROM dbo.customers"
-        myinfo = cursor.execute(sql).fetchall()
+        sql = f"SELECT * FROM dbo.customers WHERE email = '{request.form.get('email')}'"
+        myinfo = cursor.execute(sql).fetchone()
 
-        cursor.close()
-        cxnx.close()
-
-    return render_template("index.html", myinfo=myinfo)
+        return render_template("index.html", myinfo=myinfo)
+    cursor.close()
+    cxnx.close()
 
 @app.route("/buy", methods=["GET", "POST"])
 @login_required
@@ -77,8 +79,8 @@ def buy():
         cursor = cxnx.cursor()
 
         # Input desired plan
-        name = request.form.get("Name")
-        type = request.form.get("Type")
+        email = request.form.get("email")
+        name = request.form.get("name")
         category = request.form.get("Category")
 
         # If no symbols are inputted
@@ -95,11 +97,11 @@ def buy():
 
         typ = policyP[0]["Type"]
 
-        # Update customer information
-        # ASK ABOUT THE CUSTOMER STATUS
-        sql = f"INSERT INTO dbo.customers (Email, Name, Customer_ID) VALUES (?, ?, ?), email, name, session['user_id']"
+        # Update Customers and Policy tables
+        # sql = f"UPDATE dbo.customers (Customer_Status) VALUES (?, ?, ?), email, name, session['user_id']"
+        sql= f"INSERT INTO dbo.policy (name, term, type, email, premiumpayment,premiumstructure, status) VALUES (?, ?, ?, ?, ?, ?, ?), name = '{request.form.get('name')}', email = '{request.form.get('email')}',term = '{request.form.get('email')}', premiumstructure = '{request.form.get('premiumstructure')}', type = '{request.form.get('email')}', status = 'Customer', premiumpayment = '{request.form.get('email')}'"
         results = cursor.execute(sql)
-    
+        
         cxnx.commit()
 
         flash("Bought!")
