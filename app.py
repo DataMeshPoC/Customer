@@ -103,6 +103,11 @@ def login():
         # Query database for username
         sql_query = f"SELECT * FROM dbo.customers WHERE email = '{request.form.get('email')}'"
         rows = cursor.execute(sql_query).fetchall()
+        
+        if len(rows) != 1:
+            return apology("No account found.")
+        
+        session['email'] = rows
 
         cursor.close()
         cxnx.close ()
