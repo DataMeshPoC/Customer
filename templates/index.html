@@ -20,25 +20,31 @@
         <p>Country of Origin: {{ myinfo.country }}</p>
         <p>Smoking Status: {{ myinfo.smoking_status }}</p>
     </div>
+    <hr>
     <div>
-        <form action="/" method="post">
+        <form action="/" method="post" oninput = "policy_name()">
             <div class="mb-3">
-            <label for="term">Term length:</label>
-            <select name="term" id="term">
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="15">15</option>
-            </select>
+                <label for="name">Name:</label>
+                <output name="name" id="name" ></output>
+            </div>
+            <div class="mb-3">
+                <label for="term">Term length:</label>
+                <select name="term" id="term">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                </select>
             </div>
             <div class="mb-3">
                 <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="premiumpayment" name="premiumpayment" placeholder="Premium Payment" type="text">
             </div>
             <div class="mb-3">
-                <label for="term">Term length:</label>
-                <select name="term" id="term">
+                <label for="type">Type:</label>
+                <select name="type" id="type">
                     <option selected="life">Life</option>
                     <option value="medical">Medical</option>
                 </select>
+            </div>
             <div class="mb-3">
                 <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="premiumstructure" name="premiumstructure" placeholder="Structure of Premium" type="text">
             </div>
@@ -47,5 +53,13 @@
             </div>
         </form>
     </div>
+
+    <script>
+        function policy_name() {
+          var val_term = document.getElementById("term").value;
+          var val_type = document.getElementById("type").value;
+          document.getElementById("name").innerHTML = 'policy' + 'val_type + '_' + val_term;
+        }
+    </script>
 </main>
 {% endblock %}

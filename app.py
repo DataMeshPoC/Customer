@@ -56,16 +56,16 @@ def index():
     cxnx = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
     cursor = cxnx.cursor()
     # Make sure that the users reached routes via POST 
-    if request.method == "POST":
-
-        sql = f"SELECT * FROM dbo.customers WHERE email = '{request.form.get('email')}'"
+    if request.method == "GET":
+        print(session.get('info'))
+        sql = f"SELECT * FROM dbo.customers WHERE email = '{session.get('info')[4]}'"
         myinfo = cursor.execute(sql).fetchone()
 
         return render_template("index.html", myinfo=myinfo)
     
 #     Posting to the database for buying
     if request.method == "POST":
-        sql= f"INSERT INTO dbo.policy (name, term, type, email, premiumpayment,premiumstructure, status) VALUES (?, ?, ?, ?, ?, ?, ?), name = '{request.form.get('name')}', email = '{request.form.get('email')}', term = '{request.form.get('term')}', premiumstructure = '{request.form.get('premiumstructure')}', type = '{request.form.get('type')}', status = 'Customer', premiumpayment = '{request.form.get('premiumpayment')}'"
+        sql= f"INSERT INTO dbo.policy (name, term, type, email, premiumpayment,premiumstructure, status) VALUES (?, ?, ?, ?, ?, ?, ?), name = '{request.form.get('name')}', email = '{request.form.get('email')}', term = '{request.form.get('term')}', premiumstructure = '{request.form.get('premiumstructure')}', type = '{request.form.get('type')}', status = 'Draft', premiumpayment = '{request.form.get('premiumpayment')}'"
         results = cursor.execute(sql)
         
         cxnx.commit()
@@ -74,6 +74,8 @@ def index():
         return render_template("index.html")
     cursor.close()
     cxnx.close()
+
+    return render_template("index.html")
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -94,7 +96,7 @@ def login():
     if request.method == "POST":
         # Remember which user has logged in
         email = request.form.get("email")
-        session['email'] = request.form['email_address']
+        #session['email'] = request.form['email_address']
 
         # Ensure username was submitted
         if not email:
@@ -106,8 +108,10 @@ def login():
         
         if len(rows) != 1:
             return apology("No account found.")
-        
-        session['email'] = rows
+
+        print(rows)
+        session['info'] = rows[0]
+        session['user_id'] = rows[0][0]
 
         cursor.close()
         cxnx.close ()
