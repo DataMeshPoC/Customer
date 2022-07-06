@@ -65,7 +65,7 @@ def index():
     
 #     Posting to the database for buying
     if request.method == "POST":
-        sql= f"INSERT INTO dbo.policy (name, term, type, email, premiumpayment,premiumstructure, status) VALUES (?, ?, ?, ?, ?, ?, ?), name = '{request.form.get('name')}', email = '{request.form.get('email')}',term = '{request.form.get('email')}', premiumstructure = '{request.form.get('premiumstructure')}', type = '{request.form.get('email')}', status = 'Customer', premiumpayment = '{request.form.get('email')}'"
+        sql= f"INSERT INTO dbo.policy (name, term, type, email, premiumpayment,premiumstructure, status) VALUES (?, ?, ?, ?, ?, ?, ?), name = '{request.form.get('name')}', email = '{request.form.get('email')}', term = '{request.form.get('term')}', premiumstructure = '{request.form.get('premiumstructure')}', type = '{request.form.get('type')}', status = 'Customer', premiumpayment = '{request.form.get('premiumpayment')}'"
         results = cursor.execute(sql)
         
         cxnx.commit()
@@ -133,7 +133,6 @@ def register():
         dob = request.form.get("dob")
         country = request.form.get("country")
         smoking_status = request.form.get("smoking_status")
-        gender = str(request.form.get("gender"))
       
         server = 'hk-mc-fc-data.database.windows.net'
         database = 'hk-mc-fc-data-training'
@@ -161,7 +160,7 @@ def register():
         flash("Registered!")
 
         # Insert the new login information from register into the users table
-        sql = f"INSERT INTO dbo.customers (Email, Name) VALUES (?, ?), session['email'], name]"
+        sql = f"INSERT INTO dbo.customers (email, name, gender, dob, country, smoking_status) VALUES (?, ?, ?, ?, ?), email = session['email'], name = '{request.form.get('name')}, dob = '{request.form.get('dob')}, gender = '{request.form.get('gender')}, smoking_status = '{request.form.get('smoking_status')}"
         rows = cursor.execute(sql)
     
         # Push to the database
