@@ -65,13 +65,16 @@ def index():
     
 #     Posting to the database for buying
     if request.method == "POST":
-        sql= f"INSERT INTO dbo.policy (name, term, type, email, premiumpayment,premiumstructure, status) VALUES (?, ?, ?, ?, ?, ?, ?), name = '{request.form.get('name')}', email = '{request.form.get('email')}', term = '{request.form.get('term')}', premiumstructure = '{request.form.get('premiumstructure')}', type = '{request.form.get('type')}', status = 'Draft', premiumpayment = '{request.form.get('premiumpayment')}'"
+        sql= f"INSERT INTO dbo.policy (name, term, type, email, premiumpayment,premiumstructure, description, currency, status) VALUES " \
+             f"('{request.form.get('name')}', '{request.form.get('term')}', '{request.form.get('type')}', '{session.get('info')[4]}', " \
+             f"'{request.form.get('premiumpayment')}', '{request.form.get('premiumstructure')}', '{request.form.get('desc')}', 'HKD', 'Draft')"
+        print(sql)
         results = cursor.execute(sql)
         
         cxnx.commit()
 
         flash("Bought!")
-        return render_template("index.html")
+
     cursor.close()
     cxnx.close()
 

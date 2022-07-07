@@ -22,10 +22,14 @@
     </div>
     <hr>
     <div>
-        <form action="/" method="post" oninput = "policy_name()">
+        <form action="/" method="post">
             <div class="mb-3">
                 <label for="name">Name:</label>
-                <output name="name" id="name" ></output>
+                <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="name" name="name" type="text" value="Policy Name">
+            </div>
+            <div class="mb-3">
+                <label for="desc">Description:</label>
+                <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="desc" name="desc" type="text" value="Policy Description">
             </div>
             <div class="mb-3">
                 <label for="term">Term length:</label>
@@ -53,7 +57,6 @@
             </div>
         </form>
     </div>
-
     <script>
         function policy_name() {
           var val_term = document.getElementById("term").value;
