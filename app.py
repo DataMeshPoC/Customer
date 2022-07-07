@@ -65,7 +65,7 @@ def index():
     
 #     Posting to the database for buying
     if request.method == "POST":
-        sql= f"INSERT INTO dbo.policy (name, term, type, customeremail, premiumpayment,premiumstructure, description, currency, policystatus) VALUES " \
+        sql= f"INSERT INTO dbo.policydraft (name, term, type, customeremail, premiumpayment,premiumstructure, description, currency, policystatus) VALUES " \
              f"('{request.form.get('name')}', '{request.form.get('term')}', '{request.form.get('type')}', '{session.get('info')[4]}', " \
              f"'{request.form.get('premiumpayment')}', '{request.form.get('premiumstructure')}', '{request.form.get('desc')}', 'HKD', 'Draft')"
         print(sql)
