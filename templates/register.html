@@ -6,24 +6,36 @@
 
 {% block main %}
     <form action="/register" method="post">
-        <div class="mb-3">
-            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="name" name="name" placeholder="Name" type="text">
-        </div>
-        <div class="mb-3">
-            <input class="form-control mx-auto w-auto" id="email" name="email" placeholder="Email" type="text">
-        </div>
-        <div class="mb-3">
-            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="gender" name="gender" placeholder="Gender" type="text">
-        </div>
-        <div class="mb-3">
-            <input class="form-control mx-auto w-auto" id="dob" name="dob" placeholder="Date of Birth" type="date">
-        </div>
-        <div class="mb-3">
-            <input class="form-control mx-auto w-auto" id="country" name="country" placeholder="Country of Origin" type="text">
-        </div>
-        <div class="mb-3">
-            <input class="form-control mx-auto w-auto" id="smoking_status" name="smoking_status" placeholder="Smoking Status" type="text">
-        </div>
+        <form>
+            <div class="form-group">
+              <label for="formGroupExampleInput">Name</label>
+              <input type="text" class="form-control" id="name" name="name" placeholder="Name">
+            </div>
+            <div class="form-group">
+              <label for="formGroupExampleInput2">Email</label>
+              <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+            </div>
+            <div class="form-group">
+                <label for="formGroupExampleInput2">Gender</label>
+                <input type="text" class="form-control" id="gender" name="gender" placeholder="Gender">
+              </div>
+              <div class="form-group">
+                <label for="formGroupExampleInput2">Date of Birth</label>
+                <input type="date" class="form-control" id="dob" name="dob" placeholder="Date of Birth">
+              </div>
+              <div class="form-group">
+                <label for="formGroupExampleInput2">Country of Origin</label>
+                <input type="text" class="form-control" id="country" name="country" placeholder="Country of Origin">
+              </div>
+                <div class="form-row align-items-center">
+                  <div class="col-auto my-1">
+                    <label class="mr-sm-2 sr-only" for="smoking_status">Smoking Status</label>
+                    <select class="custom-select mr-sm-2" id="smoking_status" name="smoking_status" placeholder="Smoking Status">
+                      <option selected>Choose...</option>
+                      <option value="1">Yes</option>
+                      <option value="2">No</option>
+                    </select>
+                  </div>
         
         <button class="btn btn-primary" type="submit">register</button>
 

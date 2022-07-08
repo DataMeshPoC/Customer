@@ -6,9 +6,10 @@
 
 {% block main %}
     <form action="/login" method="post">
-        <div class="mb-3">
-            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="email" name="email" placeholder="Email address" type="email">
-        </div>
+        <div class="input-group mb-3">
+            <input type="email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="emailS" id="email" name="email" autocomplete="off">
+            <small id="emailS" class="form-text text-muted">We'll never share your email with anyone else.</small>
+          </div>
         <button class="btn btn-primary" type="submit">Log In</button>
     </form>
 {% endblock %}
