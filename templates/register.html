@@ -7,8 +7,9 @@
 {% block main %}
     <form action="/register" method="post">
         <form>
+          <div class= "position-absolute top-50 start-50 translate-middle">
             <div class="form-group">
-              <label for="formGroupExampleInput">Name</label>
+              <label for="Name">Name</label>
               <input type="text" class="form-control" id="name" name="name" placeholder="Name">
             </div>
             <div class="form-group">
@@ -16,15 +17,15 @@
               <input type="email" class="form-control" id="email" name="email" placeholder="Email">
             </div>
             <div class="form-group">
-                <label for="formGroupExampleInput2">Gender</label>
+                <label for="Gender">Gender</label>
                 <input type="text" class="form-control" id="gender" name="gender" placeholder="Gender">
               </div>
               <div class="form-group">
-                <label for="formGroupExampleInput2">Date of Birth</label>
+                <label for="Date of Birth">Date of Birth</label>
                 <input type="date" class="form-control" id="dob" name="dob" placeholder="Date of Birth">
               </div>
               <div class="form-group">
-                <label for="formGroupExampleInput2">Country of Origin</label>
+                <label for="Country">Country of Origin</label>
                 <input type="text" class="form-control" id="country" name="country" placeholder="Country of Origin">
               </div>
                 <div class="form-row align-items-center">
@@ -36,8 +37,9 @@
                       <option value="2">No</option>
                     </select>
                   </div>
+                </div>
         
         <button class="btn btn-primary" type="submit">register</button>
-
+      </div>
     </form>
 {% endblock %}
