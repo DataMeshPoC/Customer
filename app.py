@@ -2,7 +2,7 @@ import email
 import os
 import sys
 from unicodedata import name
-
+import subprocess
 from helpers import login_required, apology
 import logging
 from flask import Flask, flash, jsonify, redirect, render_template, request, session, url_for
@@ -48,36 +48,21 @@ def after_request(response):
 @app.route("/", methods=["GET", "POST"])
 @login_required
 def index():
-#     renders the users' data and allows them to purchase new policies
-    server = 'hk-mc-fc-data.database.windows.net'
-    database = 'hk-mc-fc-data-training'
-    username = 'server_admin'
-    password = 'Pa$$w0rd'
-    cxnx = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
-    cursor = cxnx.cursor()
-    # Make sure that the users reached routes via POST 
     if request.method == "GET":
-        print(session.get('info'))
-        sql = f"SELECT * FROM dbo.customers WHERE email = '{session.get('info')[4]}'"
-        myinfo = cursor.execute(sql).fetchone()
+#     consumes the users' data and renders it onto the index page
+      consumer = os.chmod("/client/consumer.py", 644)
+      myinfo = subprocess.call('consumer.main()', stdout='/client/getting_started.ini')
 
-        return render_template("index.html", myinfo=myinfo)
+      return render_template("index.html", myinfo=myinfo)
     
 #     Posting to the database for buying
     if request.method == "POST":
-        # sql= f"INSERT INTO dbo.policydraft (name, term, type, customeremail, premiumpayment,premiumstructure, description, currency, policystatus) VALUES " \
-        #      f"('{request.form.get('name')}', '{request.form.get('term')}', '{request.form.get('type')}', '{session.get('info')[4]}', " \
-        #      f"'{request.form.get('premiumpayment')}', '{request.form.get('premiumstructure')}', '{request.form.get('desc')}', 'HKD', 'Draft')"
-        # print(sql)
-        # results = cursor.execute(sql)
-        # cxnx.commit()
-
+#       consumes and then produces to the next stream
+        consumer = os.chmod("/client/topic2topic.py", 644)
+        customer = subprocess.call('topic2topic.main()', stdout='/client/getting_started.ini')
+        
         flash("Bought!")
-
-    cursor.close()
-    cxnx.close()
-
-    return render_template("index.html")
+        return render_template("index.html")
 
 
 @app.route("/login", methods=["GET", "POST"])
