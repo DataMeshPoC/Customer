@@ -1,50 +1,56 @@
-#!/usr/bin/env python 
-# tells environment to use python to run the script
-from threading import Thread
-from queue import Queue
+#!/usr/bin/env python3
 
-from kafka import KafkaConsumer, KafkaProducer
+import uuid
+from confluent_kafka import Consumer, KafkaError, KafkaException
+from confluent_avro import AvroKeyValueSerde, SchemaRegistry
+from confluent_avro.schema_registry import HTTPBasicAuth
 
-from codecs import getencoder
-from distutils.sysconfig import customize_compiler
-import email
-from multiprocessing import pool
-import os
-import sys
-from unicodedata import name
-from threading import Thread, Event
-from queue import Queue
-from json import dumps
+import traceback
 
-from pytz import country_names
-from multiprocessing import Queue
-from helpers import login_required, apology
-from flask import Flask, flash, jsonify, redirect, render_template, request, session, url_for
-from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
+def basic_consume_loop(consumer, topics, avroSerde):
+	try:
+		consumer.subscribe(topics)
 
-# Define the input and output topics
-topic_name_input = "PolicyDraftList"
-topic_name_output = "PolicyUWResult"
+		while True:
+			msg = consumer.poll(10)
+			if msg is None:
+				continue
+			if msg.error():
+				print('Consumer error: {}'.format(msg.error()))
+				continue
+			else:
+				v = avroSerde.value.deserialize(msg.value())
+				print('Consumed: {}'.format(v))
+	finally:
+		consumer.close()
 
-data = Queue()
 
-def bytes_to_int(bytes):
-    result = 0
-    for b in bytes:
-        result = result * 256 + int(b)
-    return result
+def main():
+	consumer = Consumer({
+		'bootstrap.servers': 'pkc-epwny.eastus.azure.confluent.cloud:9092',
+		'security.protocol': 'SASL_SSL',
+		'sasl.mechanisms': 'PLAIN',
+		'sasl.username': 'IHO7XVPCJCCBZAYX',
+		'sasl.password': 'UAwjmSIn5xuAL7HZmBjU4NGt0nLfXbyjtlVA7imgCdGBYFkog5kw0gc4e5MYmiUE',
+		'group.id': str(uuid.uuid1()),
+		'auto.offset.reset': 'earliest'
+	})
 
-consumer = KafkaConsumer(topic_name_input,
-    bootstrap_servers=['pkc-epwny.eastus.azure.confluent.cloud:9092'],
-    auto_offset_reset="earliest",
-    enable_auto_commit=True,
-    group_id="$Default",
-    sasl_mechanism="PLAIN",
-    sasl_plain_username="IHO7XVPCJCCBZAYX",
-    sasl_plain_password="UAwjmSIn5xuAL7HZmBjU4NGt0nLfXbyjtlVA7imgCdGBYFkog5kw0gc4e5MYmiUE",
-    security_protocol="SASL_SSL",
-    value_deserializer=lambda x: x.decode("utf-8"))
+	KAFKA_TOPIC = "CustomerList"
 
-producer = KafkaProducer(
-    bootstrap_servers=['pkc-epwny.eastus.azure.confluent.cloud:9092'], value_serializer=lambda x: bytes(x))
+	registry_client = SchemaRegistry(
+		"https://psrc-gq7pv.westus2.azure.confluent.cloud",
+		HTTPBasicAuth("MYXDIGGTQEEMLDU2", "azvNIgZyA4TAaOmCLzxvrXqDpaC+lamOvkGm2B7mdYrq9AwKl4IQuUq9Q6WXOp8U"),
+		headers={"Content-Type": "application/vnd.schemaregistry.v1+json"},
+	)
+	avroSerde = AvroKeyValueSerde(registry_client, KAFKA_TOPIC)
+
+	basic_consume_loop(consumer, ['CustomerList'], avroSerde)
+
+
+if __name__ == '__main__':
+	try:
+		main()
+	except Exception:
+		print (traceback.format_exc())
 
