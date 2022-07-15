@@ -58,7 +58,7 @@ def index():
         cxnx = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
         cursor = cxnx.cursor()
 
-        sql = f"SELECT * FROM  WHERE email = '{session.get('info')[4]}'"
+        sql = f"SELECT * FROM dbo.Customer WHERE email = '{session.get('info')[4]}'"
         myinfo = cursor.execute(sql).fetchone()
 
         return render_template("index.html", myinfo=myinfo)
