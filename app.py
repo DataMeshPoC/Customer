@@ -50,16 +50,24 @@ def after_request(response):
 def index():
     if request.method == "GET":
 #     consumes the users' data and renders it onto the index page
-      consumer = os.chmod("/client/consumer.py", 644)
-      myinfo = subprocess.call('consumer.main()', stdout='/client/getting_started.ini')
+       # DB CONFIG for index
+        server = 'hk-mc-fc-data.database.windows.net'
+        database = 'hk-mc-fc-data-training'
+        username = 'server_admin'
+        password = 'Pa$$w0rd'
+        cxnx = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
+        cursor = cxnx.cursor()
 
-      return render_template("index.html", myinfo=myinfo)
+        sql = f"SELECT * FROM  WHERE email = '{session.get('info')[4]}'"
+        myinfo = cursor.execute(sql).fetchone()
+
+        return render_template("index.html", myinfo=myinfo)
     
 #     Posting to the database for buying
     if request.method == "POST":
 #       consumes and then produces to the next stream
-        consumer = os.chmod("/client/topic2topic.py", 644)
-        customer = subprocess.call('topic2topic.main()', stdout='/client/getting_started.ini')
+        consumer = os.chmod("/client/producer.py", 644)
+        customer = subprocess.call('producer.main()', stdout='/client/getting_started.ini')
         
         flash("Bought!")
         return render_template("index.html")
