@@ -1,20 +1,14 @@
 import email
-import os
-import sys
 import producer
-from unicodedata import name
-import subprocess
+
 from helpers import login_required, apology
 import logging
 from flask import Flask, flash, jsonify, redirect, render_template, request, session, url_for
 from flask_session import Session
-from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from threading import Event
-import signal
 import pyodbc
-import pysftp
-import pandas as pd
+
 
 # Configure application
 app = Flask(__name__, template_folder='templates')
@@ -27,7 +21,10 @@ app.config["SESSION_PERMANENT"] = False
 app.debug = True
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
-
+premium_structure = "Premium is varied by factors including but not limited to " \
+                    "Insured's age, gender, smoking habit, health..."
+policy_description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " \
+                      "In sed massa sed dui faucibus vestibulum in quis urna. Ut tristique."
 INTERRUPT_EVENT = Event()
 
 logging.basicConfig(level=logging.DEBUG)
@@ -38,6 +35,7 @@ if __name__ == "__main__":
     app.debug = True
     app.run()
 
+
 @app.after_request
 def after_request(response):
     """Ensure responses aren't cached"""
@@ -46,12 +44,14 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
+
 @app.route("/", methods=["GET", "POST"])
 @login_required
 def index():
     if request.method == "GET":
 #     consumes the users' data and renders it onto the index page
        # DB CONFIG for index
+        # eu@yahoo.couk
         server = 'hk-mc-fc-data.database.windows.net'
         database = 'hk-mc-fc-data-training'
         username = 'server_admin'
@@ -62,22 +62,26 @@ def index():
         sql = f"SELECT * FROM dbo.Customer WHERE email = '{session.get('info')[4]}'"
         myinfo = cursor.execute(sql).fetchone()
 
-        return render_template("index.html", myinfo=myinfo)
+        return render_template("index.html", myinfo=myinfo, premium_structure=premium_structure,
+                               policy_description=policy_description)
     
 #     Posting to the topic for buying
     if request.method == "POST":
-        term = request.form.get('term')
-        premiumpayment = request.form.get('premiumpayment')
-        email = request.form.get('email')
-        premiumstructure = request.form.get('premiumstructure')
-        desc = request.form.get('desc')
-        ctype = request.form.get('ctype')
-        name = request.form.get('name')
-        cus_id = request.form.get('cus_id')
-        
-        flash("Bought!")
-        prod = producer.main(cus_id, email, term, ctype, name, desc, premiumpayment, premiumstructure) 
-        return render_template("index.html")
+        kwargs = {
+            'term': request.form.get('term')+'y',
+            'premiumpayment': request.form.get('premiumpayment'),
+            'email': session.get('info')[4],
+            'premiumstructure': premium_structure,
+            'desc': policy_description,
+            'ctype': request.form.get('ctype'),
+            'name': request.form.get('name'),
+            'cus_id': session.get('info')[0]
+        }
+
+        flash("Congratulation! You've bought a new Policy.", category='success')
+        prod = producer.main(**kwargs)
+        return render_template("index.html", myinfo=session.get('info'), premium_structure=premium_structure,
+                               policy_description=policy_description)
 
 
 @app.route("/login", methods=["GET", "POST"])

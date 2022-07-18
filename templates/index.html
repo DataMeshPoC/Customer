@@ -8,6 +8,13 @@
 
 {% block main %}
 <main class="container py-5 text-center">
+    {% with messages = get_flashed_messages(category_filter=['success']) %}
+        {% if messages %}
+           {% for message in messages %}
+                <p class=alert-success>{{ message }}</p>
+           {% endfor %}
+        {% endif %}
+    {% endwith %}
     <div>
         <h1>
             Hello, {{ myinfo.name }}!
@@ -22,26 +29,27 @@
     </div>
     <hr>
     <div>
+        <h2>Buy a new Policy</h2>
+    </div>
+    <div>
         <form action="/" method="post">
             <div class="input-group mb-3">
                 <input type="text" autocomplete="off" class="form-control" aria-label="Name" aria-describedby="Name" id="name" name="name" type="text" value="Policy Name">
               </div>
               <div class="input-group mb-3">
-                <input type="email" class="form-control" placeholder="Email" aria-label="Recipient's email" aria-describedby="emailS" id="email" name="email" autocomplete="off">
-              </div>
-              <div class="input-group mb-3">
                 <select class="form-select" id="Term" name="term" aria-label="Policy Term">
                   <option selected>Choose length of policy term: </option>
-                  <option value="1">5</option>
-                  <option value="2">10</option>
-                  <option value="3">15</option>
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="15">15</option>
                 </select>
+                    <span class="input-group-text">Years</span>
               </div>
               <div class="input-group mb-3">
                 <select class="form-select" id="ctype" name="ctype" aria-label="Policy Type">
                   <option selected>Choose policy type: </option>
-                  <option value="1">Life</option>
-                  <option value="2">Medical</option>
+                  <option value="Life">Life</option>
+                  <option value="Medical">Medical</option>
                 </select>
               </div>
               
@@ -51,10 +59,12 @@
                 <span class="input-group-text">HKD</span>
               </div>
               <div class="input-group mb-3">
-                <input type="text" autocomplete="off" class="form-control" aria-label="Description" aria-describedby="Description" id="desc" name="desc" type="text" value="Policy Description"">
+                  <span><strong>Policy Description:  </strong></span>
+                  <p style="padding-left: 5px" name="policydescription"> {{policy_description}} </p>
               </div>
               <div class="input-group mb-3">
-                <input type="text" autocomplete="off" class="form-control" aria-label="Premium Structure" aria-describedby="Structure of Premium" id="premiumstructure" name="premiumstructure" type="text" value="Structure of Premium"">
+                  <span><strong>Premium Structure:  </strong></span>
+                  <p style="padding-left: 5px" name="premiumstructure"> {{premium_structure}} </p>
               </div>
 
             <div class="mb-3">
