@@ -65,9 +65,15 @@ def index():
         cxnx = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
         cursor = cxnx.cursor()
 
+        # Select customer information to load
         sql = f"SELECT * FROM dbo.Customer WHERE email = '{session.get('info')[4]}'"
+
         myinfo = cursor.execute(sql).fetchone()
 
+        # Close cursor and connection after select query
+        cursor.close()
+        cxnx.close()
+        flash("Welcome back!")
         return render_template("index.html", myinfo=myinfo)
     
 #     Posting to the database for buying
