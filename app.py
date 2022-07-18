@@ -1,6 +1,7 @@
 import email
 import os
 import sys
+import producer
 from unicodedata import name
 import subprocess
 from helpers import login_required, apology
@@ -63,13 +64,19 @@ def index():
 
         return render_template("index.html", myinfo=myinfo)
     
-#     Posting to the database for buying
+#     Posting to the topic for buying
     if request.method == "POST":
-#       consumes and then produces to the next stream
-        consumer = os.chmod("/client/producer.py", 644)
-        customer = subprocess.call('producer.main()', stdout='/client/getting_started.ini')
+        term = request.form.get('term')
+        premiumpayment = request.form.get('premiumpayment')
+        email = request.form.get('email')
+        premiumstructure = request.form.get('premiumstructure')
+        desc = request.form.get('desc')
+        ctype = request.form.get('ctype')
+        name = request.form.get('name')
+        cus_id = request.form.get('cus_id')
         
         flash("Bought!")
+        prod = producer.main(cus_id, email, term, ctype, name, desc, premiumpayment, premiumstructure) 
         return render_template("index.html")
 
 
