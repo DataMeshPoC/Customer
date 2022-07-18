@@ -1,26 +1,35 @@
 #!/usr/bin/env python3
 
+from pickle import TRUE
 import uuid
+import sys
 from confluent_kafka import Consumer, KafkaError, KafkaException
 from confluent_avro import AvroKeyValueSerde, SchemaRegistry
 from confluent_avro.schema_registry import HTTPBasicAuth
 
 import traceback
 
+
 def basic_consume_loop(consumer, topics, avroSerde):
+	running = True
 	try:
 		consumer.subscribe(topics)
 
-		while True:
-			msg = consumer.poll(10)
-			if msg is None:
-				continue
+		while running:
+			msg = consumer.poll(timeout=1.0)
+			if msg is None: continue
 			if msg.error():
-				print('Consumer error: {}'.format(msg.error()))
-				continue
+				if msg.error().code() == KafkaError._PARTITION_EOF:
+					# end of partition event
+					sys.stderr.wrte('%% %s [%d] reached end of offset %d \n%')
+					(msg.topic(), msg.partition(), msg.offset())
 			else:
 				v = avroSerde.value.deserialize(msg.value())
-				print('Consumed: {}'.format(v))
+				# print('Consumed: {}'.format(v))
+				print(v)
+				print(v['DOB'])
+				running = False
+				return v
 	finally:
 		consumer.close()
 
@@ -34,6 +43,7 @@ def main():
 		'sasl.password': 'UAwjmSIn5xuAL7HZmBjU4NGt0nLfXbyjtlVA7imgCdGBYFkog5kw0gc4e5MYmiUE',
 		'group.id': str(uuid.uuid1()),
 		'auto.offset.reset': 'earliest'
+		
 	})
 
 	KAFKA_TOPIC = "CustomerList"

@@ -17,15 +17,15 @@
     {% endwith %}
     <div>
         <h1>
-            Hello, {{ myinfo.name }}!
+            Hello, {{ nom }}!
         </h1>
     </div>
     <div>
-        <p>Gender: {{ myinfo.gender }}</p>
-        <p>Date of Birth: {{ myinfo.dob }}</p>
-        <p>Email: {{ myinfo.email }}</p>
-        <p>Country of Origin: {{ myinfo.country }}</p>
-        <p>Smoking Status: {{ myinfo.smoking_status }}</p>
+        <p>Gender: {{ gender }}</p>
+        <p>Date of Birth: {{ dob }}</p>
+        <p>Email: {{ email }}</p>
+        <p>Country of Origin: {{ country }}</p>
+        <p>Smoking Status: {{ smoking_status }}</p>
     </div>
     <hr>
     <div>
@@ -72,12 +72,6 @@
             </div>
         </form>
     </div>
-    <script>
-        function policy_name() {
-          var val_term = document.getElementById("term").value;
-          var val_type = document.getElementById("type").value;
-          document.getElementById("name").innerHTML = 'policy' + 'val_type + '_' + val_term;
-        }
-    </script>
+
 </main>
 {% endblock %}
