@@ -1,3 +1,2 @@
 # WebApp
-
-Hello! Please find the Python code, HTML files for the front-end of the PoC that is linked to the KSQL database tables.
+A flask application built to simulate the Customers' insurance purchasing journey, built in conjunction with the Client application stored in the same repo. 
