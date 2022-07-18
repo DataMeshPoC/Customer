@@ -1,8 +1,6 @@
 import email
-<<<<<<< HEAD
 import producer
 
-=======
 import os
 import sys
 
@@ -11,7 +9,6 @@ from pytz import country_names
 import producer
 from unicodedata import name
 from subprocess import call
->>>>>>> refs/remotes/origin/main
 from helpers import login_required, apology
 import logging
 from flask import Flask, flash, jsonify, redirect, render_template, request, session, url_for
@@ -32,6 +29,7 @@ app.config["SESSION_PERMANENT"] = False
 app.debug = True
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
+
 premium_structure = "Premium is varied by factors including but not limited to " \
                     "Insured's age, gender, smoking habit, health..."
 policy_description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " \
@@ -46,7 +44,6 @@ if __name__ == "__main__":
     app.debug = True
     app.run()
 
-
 @app.after_request
 def after_request(response):
     """Ensure responses aren't cached"""
@@ -55,42 +52,49 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
-
 @app.route("/", methods=["GET", "POST"])
 @login_required
 def index():
     if request.method == "GET":
 #     consumes the users' data and renders it onto the index page
+       # DB CONFIG for index
+        server = 'hk-mc-fc-data.database.windows.net'
+        database = 'hk-mc-fc-data-training'
+        username = 'server_admin'
+        password = 'Pa$$w0rd'
+        cxnx = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
+        cursor = cxnx.cursor()
 
-        subprocess.call('python3 consumer.py', stdout=fout)
-        nom = str(v["name"])
-        dob = v["dob"]
-        email = str(v["email"])
-        country = str(v["country"])
-        smoking_status = str(v["smoking_status"])
+        sql = f"SELECT * FROM dbo.Customer WHERE email = '{session.get('info')[4]}'"
+        myinfo = cursor.execute(sql).fetchone()
 
-        return render_template("index.html", nom=nom, dob=dob, email=email, country=country,
-                               smoking_status=smoking_status, premium_structure=premium_structure,
-                               policy_description=policy_description)
+        return render_template("index.html", myinfo=myinfo)
     
-#     Posting to the topic for buying
+#     Posting to the database for buying
     if request.method == "POST":
-        kwargs = {
-            'term': request.form.get('term')+'y',
-            'premiumpayment': request.form.get('premiumpayment'),
-            'email': session.get('info')[4],
-            'premiumstructure': premium_structure,
-            'desc': policy_description,
-            'ctype': request.form.get('ctype'),
-            'name': request.form.get('name'),
-            'cus_id': session.get('info')[0]
-        }
+#       server = 'hk-mc-fc-data.database.windows.net'
+        database = 'hk-mc-fc-data-training'
+        username = 'server_admin'
+        password = 'Pa$$w0rd'
+        cxnx = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
+        cursor = cxnx.cursor()
 
-        flash("Congratulation! You've bought a new Policy.", category='success')
-        prod = producer.main(**kwargs)
-        return render_template("index.html", myinfo=session.get('info'), premium_structure=premium_structure,
-                               policy_description=policy_description)
+    if request.method == "POST":
+        # Insert customer information into KSQLDB 
+        sql= f"INSERT INTO dbo.policydraft (name, term, type, customeremail, premiumpayment,premiumstructure, description, currency, policystatus) VALUES " \
+             f"('{request.form.get('name')}', '{request.form.get('term')}', '{request.form.get('type')}', '{session.get('info')[4]}', " \
+             f"'{request.form.get('premiumpayment')}', '{request.form.get('premiumstructure')}', '{request.form.get('desc')}', 'HKD', 'Draft')"
+        # Execute changes
+        results = cursor.execute(sql)
+        # Commit changes to db
+        cxnx.commit()
 
+        # Close connector to db
+        cursor.close()
+        cxnx.close()
+        
+        flash("Congratulations! You've bought a new Policy.", category='success')
+        return render_template("index.html")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -98,7 +102,8 @@ def login():
 
     # Forget any user_id
     session.clear()
-
+    
+    # Set up connection to kSQLDB 
     server = 'hk-mc-fc-data.database.windows.net'
     database = 'hk-mc-fc-data-training'
     username = 'server_admin'
@@ -116,14 +121,15 @@ def login():
         if not email:
             return apology("must provide email")
 
-        # Query database for username
+        # Query database for email
         sql_query = f"SELECT * FROM dbo.customers WHERE email = '{request.form.get('email')}'"
         rows = cursor.execute(sql_query).fetchall()
         
+        # If there are 0 or more accounts with the same email address
         if len(rows) != 1:
             return apology("No account found.")
 
-        print(rows)
+        # Save information in session variable
         session['info'] = rows[0]
         session['user_id'] = rows[0][0]
 

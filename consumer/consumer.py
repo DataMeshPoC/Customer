@@ -9,7 +9,6 @@ from confluent_avro.schema_registry import HTTPBasicAuth
 
 import traceback
 
-
 def basic_consume_loop(consumer, topics, avroSerde):
 	running = True
 	try:
@@ -26,13 +25,10 @@ def basic_consume_loop(consumer, topics, avroSerde):
 			else:
 				v = avroSerde.value.deserialize(msg.value())
 				# print('Consumed: {}'.format(v))
-				print(v)
-				print(v['DOB'])
 				running = False
 				return v
 	finally:
 		consumer.close()
-
 
 def main():
 	consumer = Consumer({

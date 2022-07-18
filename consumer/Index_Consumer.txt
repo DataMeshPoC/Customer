@@ -1,0 +1,36 @@
+# The backend of app.py configured using the consumer rather than the stream
+
+@app.route("/", methods=["GET", "POST"])
+@login_required
+def index():
+    if request.method == "GET":
+#     consumes the users' data and renders it onto the index page
+
+        v = subprocess.call('python3 consumer.py', shell=True)
+        nom = str(v["name"])
+        dob = v["dob"]
+        email = str(v["email"])
+        country = str(v["country"])
+        smoking_status = str(v["smoking_status"])
+
+        return render_template("index.html", nom=nom, dob=dob, email=email, country=country,
+                               smoking_status=smoking_status, premium_structure=premium_structure,
+                               policy_description=policy_description)
+    
+#     Posting to the topic for buying
+    if request.method == "POST":
+        kwargs = {
+            'term': request.form.get('term')+'y',
+            'premiumpayment': request.form.get('premiumpayment'),
+            'email': session.get('info')[4],
+            'premiumstructure': premium_structure,
+            'desc': policy_description,
+            'ctype': request.form.get('ctype'),
+            'name': request.form.get('name'),
+            'cus_id': session.get('info')[0]
+        }
+
+        flash("Congratulations! You've bought a new Policy.", category='success')
+        prod = producer.main(**kwargs)
+        return render_template("index.html", myinfo=session.get('info'), premium_structure=premium_structure,
+                               policy_description=policy_description)
