@@ -74,33 +74,26 @@ def index():
         cursor.close()
         cxnx.close()
         flash("Welcome back!")
-        return render_template("index.html", myinfo=myinfo)
+        return render_template("index.html", myinfo=myinfo, premium_structure=premium_structure,
+                               policy_description=policy_description)
     
 #     Posting to the database for buying
     if request.method == "POST":
-#       server = 'hk-mc-fc-data.database.windows.net'
-        database = 'hk-mc-fc-data-training'
-        username = 'server_admin'
-        password = 'Pa$$w0rd'
-        cxnx = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
-        cursor = cxnx.cursor()
+        kwargs = {
+            'term': request.form.get('term')+'y',
+            'premiumpayment': request.form.get('premiumpayment'),
+            'email': session.get('info')[4],
+            'premiumstructure': premium_structure,
+            'desc': policy_description,
+            'ctype': request.form.get('ctype'),
+            'name': request.form.get('name'),
+            'cus_id': session.get('info')[0]
+        }
 
-    if request.method == "POST":
-        # Insert customer information into KSQLDB 
-        sql= f"INSERT INTO dbo.policydraft (name, term, type, customeremail, premiumpayment,premiumstructure, description, currency, policystatus) VALUES " \
-             f"('{request.form.get('name')}', '{request.form.get('term')}', '{request.form.get('type')}', '{session.get('info')[4]}', " \
-             f"'{request.form.get('premiumpayment')}', '{request.form.get('premiumstructure')}', '{request.form.get('desc')}', 'HKD', 'Draft')"
-        # Execute changes
-        results = cursor.execute(sql)
-        # Commit changes to db
-        cxnx.commit()
-
-        # Close connector to db
-        cursor.close()
-        cxnx.close()
-        
-        flash("Congratulations! You've bought a new Policy.", category='success')
-        return render_template("index.html")
+        flash("Congratulation! You've bought a new Policy.", category='success')
+        prod = producer.main(**kwargs)
+        return render_template("index.html", myinfo=session.get('info'), premium_structure=premium_structure,
+                               policy_description=policy_description)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
