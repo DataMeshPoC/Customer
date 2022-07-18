@@ -1,9 +1,12 @@
 import email
 import os
 import sys
+
+from numpy import double
+from pytz import country_names
 import producer
 from unicodedata import name
-import subprocess
+from subprocess import call
 from helpers import login_required, apology
 import logging
 from flask import Flask, flash, jsonify, redirect, render_template, request, session, url_for
@@ -51,18 +54,14 @@ def after_request(response):
 def index():
     if request.method == "GET":
 #     consumes the users' data and renders it onto the index page
-       # DB CONFIG for index
-        server = 'hk-mc-fc-data.database.windows.net'
-        database = 'hk-mc-fc-data-training'
-        username = 'server_admin'
-        password = 'Pa$$w0rd'
-        cxnx = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
-        cursor = cxnx.cursor()
+        subprocess.call('python3 consumer.py', stdout=fout)
+        nom = str(v["name"])
+        dob = v["dob"]
+        email = str(v["email"])
+        country = str(v["country"])
+        smoking_status = str(v["smoking_status"])
 
-        sql = f"SELECT * FROM dbo.Customer WHERE email = '{session.get('info')[4]}'"
-        myinfo = cursor.execute(sql).fetchone()
-
-        return render_template("index.html", myinfo=myinfo)
+        return render_template("index.html", nom=nom, dob=dob, email=email, country=country, smoking_status=smoking_status)
     
 #     Posting to the topic for buying
     if request.method == "POST":
