@@ -6,13 +6,13 @@
 
 {% block main %}
 <div class="py-5 text-center">
-  <h2>Register</h2>
-  <p class="lead">Fill in the formto register an account to purchase a policy. </p>
+  <h1>Register</h1>
+  <p class="lead">Fill in the form to register an account to purchase a policy. </p>
 </div>
     <form action="/register" method="post">
       <div class="container" id="first_div">
-        <div class="row justify-content-center">
-            <div class="form-group">
+        <div class="row justify-content-center white-text">
+            <div class="form-group white-text">
               <label for="Name">Name</label>
               <input type="text" class="form-control" id="name" name="name" placeholder="Name">
             </div>
@@ -45,7 +45,7 @@
                 </div>
         </div>
         <br>
-        <button class="btn btn-primary btn-sm" type="submit">register</button>
+        <button class="btn btn-primary btn-lg" type="submit">register</button>
       </div>
     </form>
 {% endblock %}

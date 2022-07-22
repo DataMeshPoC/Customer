@@ -19,6 +19,7 @@
         <h1>
             Hello, {{ myinfo.name }}!
         </h1>
+    <p>Please find your registered information below.</p>
     </div>
     <div>
         <p>Gender: {{ myinfo.gender }}</p>
@@ -28,8 +29,10 @@
         <p>Smoking Status: {{ myinfo.smoking_status }}</p>
     </div>
     <hr>
+    <br>
     <div>
-        <h2>Buy a new Policy</h2>
+        <h1>New Policy</h1>
+        <p>Fill in your desired policy information below for approval.</p>
     </div>
     <div>
         <form action="/" method="post">
@@ -58,11 +61,11 @@
                 <input type="text" class="form-control" aria-label="Premium Payment (to the nearest dollar)" id="premiumpayment" name="premiumpayment" autocomplete="off">
                 <span class="input-group-text">HKD</span>
               </div>
-              <div class="input-group mb-3">
+              <div class="input-group mb-3 white-text">
                   <span><strong>Policy Description:  </strong></span>
                   <p style="padding-left: 5px" name="policydescription"> {{policy_description}} </p>
               </div>
-              <div class="input-group mb-3">
+              <div class="input-group mb-3 white-text">
                   <span><strong>Premium Structure:  </strong></span>
                   <p style="padding-left: 5px" name="premiumstructure"> {{premium_structure}} </p>
               </div>

@@ -68,15 +68,30 @@ hr:not([size]) {
   height: 1px;
 }
 
-h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
+h6, .h6, h5, .h5, h4, .h4, h3, .h3, h1, .h1 {
   margin-top: 0;
   margin-bottom: 0.5rem;
   font-weight: 500;
   line-height: 1.2;
+  color: white;
+}
+
+h2, .h2 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color:#6d2077;
 }
 
 h1, .h1 {
   font-size: calc(1.375rem + 1.5vw);
+  color: white;
+}
+
+.white-text {
+  color:white;
+
 }
 @media (min-width: 1200px) {
   h1, .h1 {
@@ -122,6 +137,7 @@ h6, .h6 {
 p {
   margin-top: 0;
   margin-bottom: 1rem;
+  color: white;
 }
 
 abbr[title],
@@ -149,6 +165,7 @@ ul,
 dl {
   margin-top: 0;
   margin-bottom: 1rem;
+  color:white; 
 }
 
 ol ol,
@@ -156,6 +173,7 @@ ul ul,
 ol ul,
 ul ol {
   margin-bottom: 0;
+  color:white;
 }
 
 dt {
@@ -2937,41 +2955,22 @@ box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 pointer-events: none;
 opacity: 0.65;
 }
-
-.btn-primary {
-color: #fff;
-background-color: #0d6efd;
-border-color: #0d6efd;
-}
-.btn-primary:hover {
-color: #fff;
-background-color: #0b5ed7;
-border-color: #0a58ca;
-}
-.btn-check:focus + .btn-primary, .btn-primary:focus {
-color: #fff;
-background-color: #0b5ed7;
-border-color: #0a58ca;
-box-shadow: 0 0 0 0.25rem rgba(49, 132, 253, 0.5);
-}
-.btn-check:checked + .btn-primary, .btn-check:active + .btn-primary, .btn-primary:active, .btn-primary.active, .show > .btn-primary.dropdown-toggle {
-color: #fff;
-background-color: #0a58ca;
-border-color: #0a53be;
-}
-.btn-check:checked + .btn-primary:focus, .btn-check:active + .btn-primary:focus, .btn-primary:active:focus, .btn-primary.active:focus, .show > .btn-primary.dropdown-toggle:focus {
-box-shadow: 0 0 0 0.25rem rgba(49, 132, 253, 0.5);
-}
-.btn-primary:disabled, .btn-primary.disabled {
-color: #fff;
-background-color: #0d6efd;
-border-color: #0d6efd;
+.btn-primary,
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary:visited,
+.btn-primary:focus,
+.btn-primary:disabled,
+.btn-primary.disabled {
+    background-color:#6d2077; 
+    border-color:#6d2077;
+    color: white;
 }
 
 .btn-secondary {
 color: #fff;
-background-color: #6c757d;
-border-color: #6c757d;
+background-color: #6d2077;
+border-color: #6d2077;
 }
 .btn-secondary:hover {
 color: #fff;
@@ -3388,6 +3387,14 @@ color: #0a58ca;
 }
 .btn-link:disabled, .btn-link.disabled {
 color: #6c757d;
+}
+
+.kpmg-blue-bg {
+  background-color: #005e88;
+}
+
+.kpmg-lightblue-bg {
+  background-color: #0091DA;
 }
 
 .btn-lg, .btn-group-lg > .btn {
