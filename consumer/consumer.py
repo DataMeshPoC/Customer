@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from pickle import TRUE
+from unicodedata import name
 import uuid
 import sys
 from confluent_kafka import Consumer, KafkaError, KafkaException
@@ -24,7 +25,10 @@ def basic_consume_loop(consumer, topics, avroSerde):
 					(msg.topic(), msg.partition(), msg.offset())
 			else:
 				v = avroSerde.value.deserialize(msg.value())
-				# print('Consumed: {}'.format(v))
+				print('Consumed: {}'.format(v))
+				print(type(v))
+				print(v["CUSTOMERID"])
+				print(type(v["CUSTOMERID"]))
 				running = False
 				return v
 	finally:

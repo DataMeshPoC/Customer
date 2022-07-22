@@ -6,11 +6,12 @@
 
 {% block main %}
     <form action="/login" method="post">
-    <div class="form-row align-items-center">
+    <div class="form-group">
         <div class="input-group mb-3">
             <input type="email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="emailS" id="email" name="email" autocomplete="off">
+            <br>
             <small id="emailS" class="form-text text-muted">We'll never share your email with anyone else.</small>
-          </div>
+        </div>
     
         <button class="btn btn-primary btn-lg" type="submit">Log In</button>
     </div>
