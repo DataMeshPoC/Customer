@@ -7371,8 +7371,8 @@ color: #212529 !important;
 }
 
 .text-white {
-color: #fff !important;
-}
+  color: white !important;
+  }  
 
 .text-body {
 color: #212529 !important;
