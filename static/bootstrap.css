@@ -3429,14 +3429,6 @@ color: #6c757d;
   text-align: center;
   padding: 0 30px 30px;
   color:black;
-  visibility: hidden;
-  transition: transform 0.4s, top 0.4s
-}
-
-.open-popup {
-  visibility: visible;
-  top: 50%;
-  transform: translate(-50%, -50%) scale(1);
 }
 .popup img{
   width: 100px;
@@ -3454,7 +3446,7 @@ color: #6c757d;
   width: 100%;
   margin-top: 50px;
   padding: 10px 0;
-  background: // color input
+  background: white;
   border: 0;
   outline: none;
   font-size: 18px;

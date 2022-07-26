@@ -90,7 +90,7 @@ def index():
             'cus_id': session.get('info')[0]
         }
 
-        flash("Congratulation! You've bought a new Policy.", category='success')
+        flash("Congratulations! You've bought a new Policy.", category='success')
         prod = producer.main(**kwargs)
         return render_template("index.html", myinfo=session.get('info'), 
                                 premium_structure=premium_structure,
