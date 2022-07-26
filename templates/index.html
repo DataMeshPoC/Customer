@@ -16,9 +16,38 @@
         {% endif %}
     {% endwith %}
     <div>
+        <body>
         <h1>
             Hello, {{ myinfo.name }}!
         </h1>
+    </body>
+    <script>
+        function GetCookie(name) {
+            var arg=name+"=";
+            var alen=arg.length;
+            var clen=document.cookie.length;
+            var i=0;
+            while (i<clen) {
+            var j=i+alen;
+            if (document.cookie.substring(i,j)==arg)
+            return "here";
+            i=document.cookie.indexOf(" ",i)+1;
+            if (i==0) break;
+        }
+        return null;
+        }
+
+        var visit=GetCookie("COOKIE1");
+        if (visit==null){
+            var expire=new Date();
+            window.name = "newuser";
+            newuser=open("templates/newuser.html", "dispwin",
+            "width=450,height=455,scrollbars=yes,menubar=no");
+            expire=new Date(expire.getTime()+7776000000);
+            document.cookie="COOKIE1=here; expires="+expire;
+        }
+
+    </script>
     <p>Please find your registered information below.</p>
     </div>
     <div>
