@@ -32,12 +32,12 @@ def main(cus_id, email, term, ctype, name, desc, premiumpayment, premiumstructur
 		PREMIUMPAYMENT=premiumpayment,
 		PREMIUMSTRUCTURE=premiumstructure,
 		STATUS='Draft',
-		BUYTIME=now.strftime("%Y-%m-%d:%H%M")
+		BUYTIME=now.strftime("%Y-%m-%d %H:%M:%S")
 	)
 
 	sr = SchemaRegistryClient({
-		"url": "https://psrc-gq7pv.westus2.azure.confluent.cloud",
-		"basic.auth.user.info": "MYXDIGGTQEEMLDU2:azvNIgZyA4TAaOmCLzxvrXqDpaC+lamOvkGm2B7mdYrq9AwKl4IQuUq9Q6WXOp8U"
+		"url": "https://psrc-9wjxm.southeastasia.azure.confluent.cloud",
+		"basic.auth.user.info": "43EV26QTDLE26FWD:OFCaxYa3QQmoBU+TMpiKQrOFE43dRXVCy8iR0YsjTZf9NILxzSYcMpXy/d3t1ymp"
 	})
 
 	path = os.path.realpath(os.path.dirname(__file__))
@@ -50,8 +50,8 @@ def main(cus_id, email, term, ctype, name, desc, premiumpayment, premiumstructur
 			'bootstrap.servers': 'pkc-epwny.eastus.azure.confluent.cloud:9092',
 			'security.protocol': 'SASL_SSL',
 			'sasl.mechanisms': 'PLAIN',
-			'sasl.username': 'IHO7XVPCJCCBZAYX',
-			'sasl.password': 'UAwjmSIn5xuAL7HZmBjU4NGt0nLfXbyjtlVA7imgCdGBYFkog5kw0gc4e5MYmiUE',
+			'sasl.username': 'G43OXASWELV233ID',
+			'sasl.password': '6AqiTiagib5OMxCcusHqevMihIhFbJBQ5VUEvjHeD9jYySLv/DQgkHuRXkV+t4sV',
 			'value.serializer': avro_serializer
 		})
 

@@ -80,6 +80,14 @@
         "null",
         "string"
       ]
+    },
+    {
+      "default": null,
+      "name": "BUYTIME",
+      "type": [
+        "null",
+        "string"
+      ]
     }
   ],
   "name": "KsqlDataSourceSchema",
