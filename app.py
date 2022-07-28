@@ -1,19 +1,10 @@
 import email
 import producer
-
-import os
-import sys
-
-from numpy import double
-from pytz import country_names
-import producer
-from unicodedata import name
-from subprocess import call
 from helpers import login_required, apology
 import logging
-from flask import Flask, flash, jsonify, redirect, render_template, request, session, url_for
+from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
-from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
+from werkzeug.exceptions import HTTPException, InternalServerError
 from threading import Event
 import pyodbc
 

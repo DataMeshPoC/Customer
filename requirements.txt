@@ -4,3 +4,4 @@ Werkzeug
 pyodbc
 requests
 confluent_kafka
+fastavro
