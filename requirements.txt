@@ -3,3 +3,4 @@ Flask-Session
 Werkzeug
 pyodbc
 requests
+confluent_kafka
