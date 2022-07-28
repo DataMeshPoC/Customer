@@ -61,3 +61,6 @@ jobs:
           app-name: 'DataMeshPolicySubsApp'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_5185AE79D077493984144B9840B195B9 }}
+
+
+
