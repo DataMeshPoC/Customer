@@ -1,8 +1,4 @@
-confluent-kafka
-kafka-python
-Python
 Flask
+Flask-Session
 Werkzeug
-Jinja2
-numpy
 pyodbc
