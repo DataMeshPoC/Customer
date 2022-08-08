@@ -126,7 +126,7 @@ def login():
         cursor.close()
         cxnx.close()
         # Redirect user to home page
-        return redirect("/")
+        return redirect("index.html")
 
     # User reached route via GET
     else:
