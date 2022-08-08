@@ -173,21 +173,22 @@ def register():
         if len(rows) != 0:
             return apology("email already used")
         
-         # Insert the new login information from register into the users table
-        sql = f"'INSERT INTO dbo.customers (email, name, gender, dob, country, smoking_status) VALUES (?, ?, ?, ?, ?, ?)', email = str(request.form.get('email')), name = '{request.form.get('name')}', gender = '{request.form.get('gender')}', dob = '{request.form.get('dob')}', country = '{request.form.get('country')}', smoking_status = '{request.form.get('smoking_status')}'"
-        rows = cursor.execute(sql)
-        # Push to the database
-        cursor.commit()
-   
-        # Remember which user is currently logged in
-        session['user_id'] = rows
-        session['email'] = email
+        else: 
+            # Insert the new login information from register into the users table
+            sql = f"'INSERT INTO dbo.customers (email, name, gender, dob, country, smoking_status) VALUES (?, ?, ?, ?, ?, ?)', email = str(request.form.get('email')), name = '{request.form.get('name')}', gender = '{request.form.get('gender')}', dob = '{request.form.get('dob')}', country = '{request.form.get('country')}', smoking_status = '{request.form.get('smoking_status')}'"
+            rows = cursor.execute(sql)
+            # Push to the database
+            cursor.commit()
+    
+            # Remember which user is currently logged in
+            session['info'] = rows 
+            session['user_id'] = email
 
-        # Let user know they're registered
-        flash("Registered!")
+            # Let user know they're registered
+            flash("Registered!")
 
-    # Confirm registration
-        return redirect("/")
+            # Confirm registration
+            return redirect("/")
 
     else:
         return render_template("register.html")
