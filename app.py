@@ -165,6 +165,8 @@ def register():
         if not email:
             return apology("Input email please.")
 
+        flash("message received")
+
         # Check if login information is already taken
         sql3 = f"SELECT * FROM dbo.customers WHERE email = '{request.form.get('email')}'"
         rows = cursor.execute(sql3)
@@ -172,12 +174,15 @@ def register():
         # If there is more than one row with the username inputted through the post request
         if len(rows) != 0:
             return apology("email already used")
+        flash("not taken email")
         
          # Insert the new login information from register into the users table
         sql = f"INSERT INTO dbo.customers (email, name, gender, dob, country, smoking_status) VALUES (?, ?, ?, ?, ?), email = session['user_id'], name = '{request.form.get('name')}, dob = '{request.form.get('dob')}, gender = '{request.form.get('gender')}, smoking_status = '{request.form.get('smoking_status')}"
         rows = cursor.execute(sql)
         # Push to the database
         cxnx.commit()
+
+        flash("error")
       
         # Log user in
         session['user_id'] = str(request.form.get("email"))
