@@ -148,6 +148,7 @@ def logout():
 def register():
     # Make sure that the users reached routes via POST
     if request.method == "POST":
+        name = request.form.get("name")
         session['email'] = str(request.form.get("email"))
         gender = request.form.get("gender")
         dob = request.form.get("dob")
@@ -187,9 +188,8 @@ def register():
         sql = f"INSERT INTO dbo.customers (email, name, gender, dob, country, smoking_status) VALUES (?, ?, ?, ?, ?), email = session['email'], name = '{request.form.get('name')}, dob = '{request.form.get('dob')}, gender = '{request.form.get('gender')}, smoking_status = '{request.form.get('smoking_status')}"
         rows = cursor.execute(sql)
     
-        # # Push to the database
+        # Push to the database
         cxnx.commit()
-       
         session["email"] = rows
 
     # Confirm registration
