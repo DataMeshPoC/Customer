@@ -188,7 +188,7 @@ def register():
         flash("Registered!")
 
         # Confirm registration
-        return redirect("index.html")
+        return redirect("/login")
 
     else:
         return render_template("register.html")
