@@ -126,7 +126,7 @@ def login():
         cursor.close()
         cxnx.close()
         # Redirect user to home page
-        return redirect("index.html")
+        return redirect("/")
 
     # User reached route via GET
     else:
@@ -164,6 +164,11 @@ def register():
         # Validate submission; ensure username was submitted
         if not email:
             return apology("Input email please.")
+
+       
+        # If there is more than one row with the username inputted through the post request
+        if len(rows) != 0:
+            return apology("email already used")
 
         try:
             # Insert the new login information from register into the users table
