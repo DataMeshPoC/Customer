@@ -115,7 +115,7 @@ def login():
         sql_query = f"SELECT * FROM dbo.customers WHERE email = '{request.form.get('email')}'"
         rows = cursor.execute(sql_query).fetchall()
         
-        #If there are 0 or more accounts with the same email address
+        # If there are 0 or more accounts with the same email address
         if len(rows) != 1:
             return apology("No account found.")
 
@@ -124,8 +124,8 @@ def login():
         session['user_id'] = rows[0][0]
 
         cursor.close()
-        cxnx.close ()
-        #Redirect user to home page
+        cxnx.close()
+        # Redirect user to home page
         return redirect("/")
 
     # User reached route via GET
@@ -165,24 +165,19 @@ def register():
         if not email:
             return apology("Input email please.")
 
-        flash("message received")
-
         # Check if login information is already taken
         sql3 = f"SELECT * FROM dbo.customers WHERE email = '{request.form.get('email')}'"
-        rows = cursor.execute(sql3)
-        cxnx.commit()
+        rows = cursor.execute(sql3).fetchall()
+
         # If there is more than one row with the username inputted through the post request
         if len(rows) != 0:
             return apology("email already used")
-        flash("not taken email")
         
          # Insert the new login information from register into the users table
-        sql = f"INSERT INTO dbo.customers (email, name, gender, dob, country, smoking_status) VALUES (?, ?, ?, ?, ?), email = session['user_id'], name = '{request.form.get('name')}, dob = '{request.form.get('dob')}, gender = '{request.form.get('gender')}, smoking_status = '{request.form.get('smoking_status')}"
+        sql = f"INSERT INTO dbo.customers (email, name, gender, dob, country, smoking_status) VALUES (?, ?, ?, ?, ?), email = 'str(request.form.get('email'))', name = '{request.form.get('name')}, dob = '{request.form.get('dob')}, gender = '{request.form.get('gender')}, smoking_status = '{request.form.get('smoking_status')}"
         rows = cursor.execute(sql)
         # Push to the database
         cxnx.commit()
-
-        flash("error")
       
         # Log user in
         session['user_id'] = str(request.form.get("email"))
