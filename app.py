@@ -106,7 +106,6 @@ def login():
     if request.method == "POST":
         # Remember which user has logged in
         email = request.form.get("email")
-        #session['email'] = request.form['email_address']
 
         # Ensure username was submitted
         if not email:
@@ -149,7 +148,7 @@ def register():
     # Make sure that the users reached routes via POST
     if request.method == "POST":
         name = request.form.get("name")
-        session['email'] = str(request.form.get("email"))
+        session['user_id'] = str(request.form.get("email"))
         gender = request.form.get("gender")
         dob = request.form.get("dob")
         country = request.form.get("country")
@@ -166,31 +165,25 @@ def register():
         if not email:
             return apology("Input email please.")
 
-         # Check if login information is already taken
-        try:
-            sql3 = f"INSERT INTO dbo.customers (email, name) VALUES(?, ?), email = '{request.form.get('email')}', name = '{request.form.get('name')}'"
-            id = cursor.execute(sql3)
-            cxnx.commit()
-        except ValueError:
-            return apology("username taken")
-        j = "john@example.com"
+        # Check if login information is already taken
+        sql3 = f"SELECT * FROM dbo.customers WHERE email = '{request.form.get('email')}'"
+        rows = cursor.execute(sql3)
+        cxnx.commit()
+        # If there is more than one row with the username inputted through the post request
+        if len(rows) != 0:
+            return apology("email already used")
+        
+         # Insert the new login information from register into the users table
+        sql = f"INSERT INTO dbo.customers (email, name, gender, dob, country, smoking_status) VALUES (?, ?, ?, ?, ?), email = session['user_id'], name = '{request.form.get('name')}, dob = '{request.form.get('dob')}, gender = '{request.form.get('gender')}, smoking_status = '{request.form.get('smoking_status')}"
+        rows = cursor.execute(sql)
+        # Push to the database
+        cxnx.commit()
       
-        # Check user
-        if str(email) == j:
-            session['user_id'] = j  
         # Log user in
-        session["user_id"] = j
+        session['user_id'] = str(request.form.get("email"))
 
         # Let user know they're registered
         flash("Registered!")
-
-        # Insert the new login information from register into the users table
-        sql = f"INSERT INTO dbo.customers (email, name, gender, dob, country, smoking_status) VALUES (?, ?, ?, ?, ?), email = session['email'], name = '{request.form.get('name')}, dob = '{request.form.get('dob')}, gender = '{request.form.get('gender')}, smoking_status = '{request.form.get('smoking_status')}"
-        rows = cursor.execute(sql)
-    
-        # Push to the database
-        cxnx.commit()
-        session["email"] = rows
 
     # Confirm registration
         return redirect("/")
