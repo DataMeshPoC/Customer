@@ -165,19 +165,19 @@ def register():
         if not email:
             return apology("Input email please.")
 
-       
+        # Check if login information is already taken
+        sql3 = f"SELECT * FROM dbo.customers WHERE email = '{request.form.get('email')}'"
+        rows = cursor.execute(sql3).fetchall()
+
         # If there is more than one row with the username inputted through the post request
         if len(rows) != 0:
             return apology("email already used")
-
-        try:
-            # Insert the new login information from register into the users table
-            sql = f"'INSERT INTO dbo.customers (email, name, gender, dob, country, smoking_status) VALUES (?, ?, ?, ?, ?, ?)', email = 'request.form.get('email')', name = '{request.form.get('name')}', gender = '{request.form.get('gender')}', dob = '{request.form.get('dob')}', country = '{request.form.get('country')}', smoking_status = '{request.form.get('smoking_status')}'"
-            rows = cursor.execute(sql)
+        
+         # Insert the new login information from register into the users table
+        sql = f"'INSERT INTO dbo.customers (email, name, gender, dob, country, smoking_status) VALUES ('request.form.get('email')', '{request.form.get('name')}', '{request.form.get('gender')}','{request.form.get('dob')}','{request.form.get('country')}', '{request.form.get('smoking_status')}'"
+        rows = cursor.execute(sql)
         # Push to the database
-            cursor.commit()
-        except ValueError:
-            return apology("Email already exists.")
+        cxnx.commit()
    
         # Remember which user is currently logged in
         session['info'] = rows 
