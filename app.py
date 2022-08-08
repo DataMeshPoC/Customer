@@ -148,7 +148,7 @@ def register():
     # Make sure that the users reached routes via POST
     if request.method == "POST":
         name = request.form.get("name")
-        session['user_id'] = str(request.form.get("email"))
+        email = str(request.form.get("email"))
         gender = request.form.get("gender")
         dob = request.form.get("dob")
         country = request.form.get("country")
@@ -174,13 +174,13 @@ def register():
             return apology("email already used")
         
          # Insert the new login information from register into the users table
-        sql = f"INSERT INTO dbo.customers (email, name, gender, dob, country, smoking_status) VALUES (?, ?, ?, ?, ?), email = 'str(request.form.get('email'))', name = '{request.form.get('name')}, dob = '{request.form.get('dob')}, gender = '{request.form.get('gender')}, smoking_status = '{request.form.get('smoking_status')}"
+        sql = f"INSERT INTO dbo.customers (email, name, gender, dob, country, smoking_status) VALUES (?, ?, ?, ?, ?, ?), email = str(request.form.get('email')), name = '{request.form.get('name')}', dob = '{request.form.get('dob')}', gender = '{request.form.get('gender')}', smoking_status = '{request.form.get('smoking_status')}', country = '{request.form.get('country')}'"
         rows = cursor.execute(sql)
         # Push to the database
         cxnx.commit()
       
         # Log user in
-        session['user_id'] = str(request.form.get("email"))
+        session['user_id'] = email
 
         # Let user know they're registered
         flash("Registered!")
