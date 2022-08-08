@@ -174,7 +174,7 @@ def register():
             return apology("email already used")
         
          # Insert the new login information from register into the users table
-        sql = f"'INSERT INTO dbo.customers (email, name, gender, dob, country, smoking_status) VALUES (?, ?, ?, ?, ?, ?)', email = str(request.form.get('email')), name = '{request.form.get('name')}', gender = '{request.form.get('gender')}', dob = '{request.form.get('dob')}', country = '{request.form.get('country')}', smoking_status = '{request.form.get('smoking_status')}'"
+        sql = f"'INSERT INTO dbo.customers (email, name, gender, dob, country, smoking_status) VALUES (?, ?, ?, ?, ?, ?)', email = 'request.form.get('email')', name = '{request.form.get('name')}', gender = '{request.form.get('gender')}', dob = '{request.form.get('dob')}', country = '{request.form.get('country')}', smoking_status = '{request.form.get('smoking_status')}'"
         rows = cursor.execute(sql)
         # Push to the database
         cursor.commit()
