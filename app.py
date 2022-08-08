@@ -177,7 +177,7 @@ def register():
         sql = f"'INSERT INTO dbo.customers (email, name, gender, dob, country, smoking_status) VALUES (?, ?, ?, ?, ?, ?)', email = str(request.form.get('email')), name = '{request.form.get('name')}', gender = '{request.form.get('gender')}', dob = '{request.form.get('dob')}', country = '{request.form.get('country')}', smoking_status = '{request.form.get('smoking_status')}'"
         rows = cursor.execute(sql)
         # Push to the database
-        cxnx.commit()
+        cursor.commit()
    
         # Remember which user is currently logged in
         session['user_id'] = rows
